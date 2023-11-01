@@ -47,7 +47,7 @@ def inidica_posicao(sort, espe):
 
     return lis
 
-a=int(input('Escolha sua dificuldade (1-7)'))
+a=int(input('Escolha sua dificuldade (1-7) '))
 letras=a+2
 listaescolhida=filtra(PALAVRAS,letras)
 
@@ -55,4 +55,19 @@ dicio_inicio=inicializa(listaescolhida)
 
 tentativa=0
 while tentativa<dicio_inicio['tentativas']:
-    chute=input(f'Tente uma palavra com {letras} letras')
+    chute=input(f'Tente uma palavra com {letras} letras  ')
+    comparar=inidica_posicao(dicio_inicio['sorteada'],chute)
+    if comparar == []:
+        print(f'essa palavra não possui {letras} letras, tente novamente com uma palavra válida ')
+        tentativa=tentativa
+    else:
+        parcial=''
+        for pos in range(len(comparar)):
+            if comparar[pos]==0:
+                parcial+=(f'\033[0;32;40m {chute[pos]} \033[m')
+            elif comparar[pos]==1:
+                parcial+=(f'\033[0;33;40m {chute[pos]} \033[m')
+            elif comparar[pos]==2:
+                parcial+=(f'\033[0;37;40m {chute[pos]} \033[m')
+        print(parcial)
+        tentativa+=1
