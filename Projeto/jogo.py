@@ -1,27 +1,25 @@
 import random
 from palavras import PALAVRAS
-def filtra(lista,num):
+
+
+# FUNÇÕES
+
+def filtra(lista,num): # Filtra as palavras com a quantidade de letras desejadas
     lisn=[]
     for palavra in lista:
-        som=0
-        for letra in palavra:
-            som+=1
-        if som==num:
-            if palavra.lower() not in lisn:
-                lisn.append(palavra.lower())
+        if len(palavra)==num:
+            lisn.append(palavra.lower())
     return lisn
 
 
-def inicializa(lis):
+def inicializa(lis):  # Define as configuraões do jogo
     a=random.choice(lis)
-    soma=0
-    for letra in a:
-        soma+=1
-    dicio={}
-    dicio['n']=soma
-    dicio['sorteada']=a
-    dicio['especuladas']=[]
-    dicio['tentativas']=soma+1
+    dicio={
+        'n': len(a),
+        'sorteada' : a,
+        'especuladas' : [],
+        'tentativas': len(a) + 1  # Usuário pode tentar uma vez para cada letra com um bonus de 1 tentativa
+    }
     return dicio
 
 def inidica_posicao(sort, espe):
