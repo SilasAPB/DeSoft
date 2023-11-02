@@ -1,9 +1,14 @@
 import random
 from palavras import PALAVRAS
 
+cores = {
+    'correta' : '\033[0;32;40m',
+    'parcial' : '\033[0;33;40m',
+    'neutra' : '\033[0;37;40m',
+    'padrao' : '\033[m'
+}
 
 # FUNÇÕES
-
 def filtra(lista,num): # Filtra as palavras com a quantidade de letras desejadas
     lisn=[]
     for palavra in lista:
@@ -22,39 +27,26 @@ def inicializa(lis):  # Define as configuraões do jogo
     }
     return dicio
 
-def inidica_posicao(sort, espe):
-    conts=0
-    conte=0
+def inidica_posicao(sort, espe):  # ("Palavra sorteada pelo sistema", "Palavra especulada pelo usuário")
+    # 
     lis=[]
-    for letra in sort:
-        conts+=1
-    for letra in espe:
-        conte+=1
-    if conts!=conte:
+    if len(sort)==len(espe):
         return []
     else:
-        i=0
-        while i<conts:
+        for i in range(len(sort)):
             if espe[i]==sort[i]:
-                lis.append(0)
+                lis.append(0)  # Letra está na posição correta
             elif espe[i] in sort:
-                lis.append(1)
+                lis.append(1)  # Letra existe na palavra sorteada
             else:
-                lis.append(2)
-            i+=1
-
+                lis.append(2)  # Letra não existe na palavra sorteada
     return lis
 
-a=int(input('Escolha sua dificuldade (1-7) '))
-letras=a+2
-listaescolhida=filtra(PALAVRAS,letras)
 
-dicio_inicio=inicializa(listaescolhida)
-resposta=dicio_inicio['sorteada']
+def clTxt(cor,texto):
+    return cores[cor]+texto+cores['padrao']
 
-tentativa=0
-while tentativa<dicio_inicio['tentativas']:
-    chute=input(f'Tente uma palavra com {letras} letras  ')
+def validaTentativa(chute):
     if chute not in listaescolhida:
         print('Palavra não conhecida, tente outra')
     else:
@@ -81,3 +73,22 @@ while tentativa<dicio_inicio['tentativas']:
             print('\033[1;30;43m PARABÉNS, VOCÊ DESCOBRIU A PALAVRA \033[m')
         elif a!=letras and tentativa==dicio_inicio['tentativas']:
             print(f'\033[1;31;40m que pena, você não descobriu... A resposta era {resposta} \033[m')
+
+def ptTabela(historico,tentativa,tamanho):
+    
+
+
+a=int(input('Escolha sua dificuldade (1-7) '))
+
+letras=a+2  # Quantidade de letras corresponde ao nivel de dificuldade + 2
+
+listaescolhida=filtra(PALAVRAS,letras)
+
+dicio_inicio=inicializa(listaescolhida)
+resposta=dicio_inicio['sorteada']
+
+tentativa=0
+while tentativa<dicio_inicio['tentativas']:
+    chute=input(f'Tente uma palavra com {letras} letras  ')
+    validaTentativa(chute)
+    
