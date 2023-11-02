@@ -47,7 +47,7 @@ def clTxt(cor,texto):
     return cores[cor]+texto+cores['padrao']
 
 def validaTentativa(chute):
-    if chute not in listaescolhida:
+    if chute not in listaescolhida:  # Verifica se a entrada é uma palavra
         print('Palavra não conhecida, tente outra')
     else:
         comparar=inidica_posicao(dicio_inicio['sorteada'],chute)
@@ -74,7 +74,15 @@ def validaTentativa(chute):
         elif a!=letras and tentativa==dicio_inicio['tentativas']:
             print(f'\033[1;31;40m que pena, você não descobriu... A resposta era {resposta} \033[m')
 
-def ptTabela(historico,tentativa,tamanho):
+def ptTabela(historico,tamanho):
+    tabela = '-'*((3*tamanho)-1)
+    if len(historico):
+        for palavra in historico:
+            coluna = '|'
+            for l in palavra:
+                coluna+= l+'|'
+            tabela+=coluna
+        
     
 
 
@@ -91,4 +99,5 @@ tentativa=0
 while tentativa<dicio_inicio['tentativas']:
     chute=input(f'Tente uma palavra com {letras} letras  ')
     validaTentativa(chute)
-    
+    dicio_inicio['especuladas']
+    ptTabela(chute,dicio_inicio['especuladas'],dicio_inicio['tentativas'])
