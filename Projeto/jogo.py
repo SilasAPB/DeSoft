@@ -110,7 +110,8 @@ while continuar:
         if acs==letras:  # Checa se todas as letras foram acertadas
             correto = True
         else:
-            tentativa+=1
+            if valid:
+                tentativa+=1
 
 
     # Sequência fora do loop de jogo
