@@ -53,11 +53,11 @@ def clTxt(texto,cor):  # Adicionar caracteres coloridos
 
 def validaTentativa(chute):
     if chute not in listaescolhida:  # Verifica se a entrada é uma palavra dentro da lista de palavras
-        return ('Palavra não conhecida, tente outra',False)
+        return ('Palavra não conhecida, tente outra',False,0)
     else:
         comparar=inidica_posicao(dicio_inicio['sorteada'],chute)
         if comparar == []:
-            return(f'essa palavra não possui {letras} letras, tente novamente com uma palavra válida ',False)
+            return(f'essa palavra não possui {letras} letras, tente novamente com uma palavra válida ',False,0)
         else:
             global tentativa
             
@@ -70,27 +70,26 @@ def validaTentativa(chute):
                 elif comparar[pos]==2:
                     parcial.append(clTxt(chute[pos],'neutra'))
 
-            a=comparar.count(0)
-            if a==letras:
-                tentativa=dicio_inicio['tentativas']
-            else:
-                tentativa+=1
-            return (parcial,True)
+            return (parcial,True,comparar.count(0))
     
     
 
 
-a=int(input('Escolha sua dificuldade (1-7) '))
+nivel=int(input('Escolha sua dificuldade (1-7) '))
 
-letras=a+2  # Quantidade de letras corresponde ao nivel de dificuldade + 2
+letras=nivel+2  # Quantidade de letras corresponde ao nivel de dificuldade + 2
 
 listaescolhida=filtra(PALAVRAS,letras)
 
 dicio_inicio=inicializa(listaescolhida)
 resposta=dicio_inicio['sorteada']
 
+print(resposta)
+
+correto = False
+
 tentativa=0
-while tentativa<dicio_inicio['tentativas']:
+while tentativa<dicio_inicio['tentativas'] and not correto:
 
     print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
     
@@ -98,16 +97,22 @@ while tentativa<dicio_inicio['tentativas']:
 
     os.system('cls||clear')
 
-    (res,valid) = validaTentativa(chute)
+    (res,valid,acs) = validaTentativa(chute)
     if valid:
         dicio_inicio['especuladas'].append(res)
     else:
         print(res)
+    
+
+    if acs==letras:  # Checa se todas as letras foram acertadas
+        correto = True
+    else:
+        tentativa+=1
 
 
 # Sequência fora do loop de jogo
 print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
-if tentativa<=dicio_inicio['tentativas']:  # Caso o usuário tenha descoberto a palavra
+if correto:  # Caso o usuário tenha descoberto a palavra
     print(f'{cores["correta"]} PARABÉNS, VOCÊ DESCOBRIU A PALAVRA {cores["neutra"]}')
-elif a!=letras and tentativa==dicio_inicio['tentativas']:  # Caso o usuário não tenha conseguido achar a palavra
+elif nivel!=letras and tentativa==dicio_inicio['tentativas']:  # Caso o usuário não tenha conseguido achar a palavra
     print(f'{cores["errada"]} Que pena, você não descobriu... A resposta era {resposta}{cores["neutra"]}')
