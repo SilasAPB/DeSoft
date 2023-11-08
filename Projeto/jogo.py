@@ -78,16 +78,20 @@ def validaTentativa(chute):
 
 os.system('cls||clear')  # Limpar console
 
-nivel=int(input('Escolha sua dificuldade (1-7) '))
+continuar=True
 
-letras=nivel+2  # Quantidade de letras corresponde ao nivel de dificuldade + 2
+while continuar:
 
-listaescolhida=filtra(PALAVRAS,letras)
+    nivel=int(input('Escolha sua dificuldade (1-7) '))
 
-dicio_inicio=inicializa(listaescolhida)
-resposta=dicio_inicio['sorteada']
+    letras=nivel+2  # Quantidade de letras corresponde ao nivel de dificuldade + 2
 
-correto = False
+    listaescolhida=filtra(PALAVRAS,letras)
+
+    dicio_inicio=inicializa(listaescolhida)
+    resposta=dicio_inicio['sorteada']
+
+    correto = False
 
 tentativa=0
 historico = []
@@ -97,7 +101,7 @@ while tentativa<dicio_inicio['tentativas'] and not correto:
     
     chute=input(f'Tente uma palavra com {letras} letras: ')
 
-    os.system('cls||clear')  # Limpar console
+        os.system('cls||clear')  # Limpar console
 
     (res,valid,acs) = validaTentativa(chute)
     if valid:
@@ -113,9 +117,15 @@ while tentativa<dicio_inicio['tentativas'] and not correto:
         tentativa+=1
 
 
-# Sequência fora do loop de jogo
-print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
-if correto:  # Caso o usuário tenha descoberto a palavra
-    print(f'{cores["correta"]} PARABÉNS, VOCÊ DESCOBRIU A PALAVRA {cores["neutra"]}')
-elif nivel!=letras and tentativa==dicio_inicio['tentativas']:  # Caso o usuário não tenha conseguido achar a palavra
-    print(f'{cores["errada"]} Que pena, você não descobriu... A resposta era {resposta}{cores["neutra"]}')
+    # Sequência fora do loop de jogo
+    print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
+    if correto:  # Caso o usuário tenha descoberto a palavra
+        print(f'{cores["correta"]} PARABÉNS, VOCÊ DESCOBRIU A PALAVRA {cores["neutra"]}')
+    elif nivel!=letras and tentativa==dicio_inicio['tentativas']:  # Caso o usuário não tenha conseguido achar a palavra
+        print(f'{cores["errada"]} Que pena, você não descobriu... A resposta era {resposta}{cores["neutra"]}')
+
+    pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
+    if int(pergunta)==1:
+        continuar=True
+    elif int(pergunta)==0:
+        continuar=False
