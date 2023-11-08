@@ -1,4 +1,4 @@
-# @param Função para imprimir uma tabela com as tentativas do usuário
+# Função para imprimir uma tabela com as tentativas do usuário
 def crTabela(historico,tamanho,tmax):
     divisa = '-'*((4*tamanho)+1) + '\n'  # Estrutura para dividir as linhas da tabela
     tabela = divisa  # Inicializando uma tabela vazia

@@ -54,6 +54,8 @@ def clTxt(texto,cor):  # Adicionar caracteres coloridos
 def validaTentativa(chute):
     if chute not in listaescolhida:  # Verifica se a entrada é uma palavra dentro da lista de palavras
         return ('Palavra não conhecida, tente outra',False,0)
+    elif chute in dicio_inicio['especuladas']:
+        return ('Essa palavra já foi digitada. Digite novamente!',False,0)
     else:
         comparar=inidica_posicao(dicio_inicio['sorteada'],chute)
         if comparar == []:
@@ -88,9 +90,10 @@ resposta=dicio_inicio['sorteada']
 correto = False
 
 tentativa=0
+historico = []
 while tentativa<dicio_inicio['tentativas'] and not correto:
 
-    print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
+    print(crTabela(historico,letras,dicio_inicio['tentativas']))
     
     chute=input(f'Tente uma palavra com {letras} letras: ')
 
@@ -98,14 +101,15 @@ while tentativa<dicio_inicio['tentativas'] and not correto:
 
     (res,valid,acs) = validaTentativa(chute)
     if valid:
-        dicio_inicio['especuladas'].append(res)
+        historico.append(res)
+        dicio_inicio['especuladas'].append(chute.lower())
     else:
         print(res)
     
 
     if acs==letras:  # Checa se todas as letras foram acertadas
         correto = True
-    else:
+    elif valid:
         tentativa+=1
 
 
