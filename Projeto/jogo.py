@@ -1,4 +1,5 @@
 import random
+import os
 from palavras import PALAVRAS
 
 # Funções em módulo
@@ -9,7 +10,6 @@ cores = {
     'parcial' : '\033[0;33;40m',
     'neutra' : '\033[0;37;40m',
     'padrao' : '\033[m',
-    'correta' : '\033[1;30;43m',
     'errada' : '\033[1;31;40m'
 }
 
@@ -91,7 +91,12 @@ resposta=dicio_inicio['sorteada']
 
 tentativa=0
 while tentativa<dicio_inicio['tentativas']:
+
+    print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
+    
     chute=input(f'Tente uma palavra com {letras} letras: ')
+
+    os.system('cls||clear')
 
     (res,valid) = validaTentativa(chute)
     if valid:
@@ -99,11 +104,10 @@ while tentativa<dicio_inicio['tentativas']:
     else:
         print(res)
 
-    print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
-
 
 # Sequência fora do loop de jogo
-if a==letras and tentativa<=dicio_inicio['tentativas']:  # Caso o usuário tenha descoberto a palavra
+print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
+if tentativa<=dicio_inicio['tentativas']:  # Caso o usuário tenha descoberto a palavra
     print(f'{cores["correta"]} PARABÉNS, VOCÊ DESCOBRIU A PALAVRA {cores["neutra"]}')
 elif a!=letras and tentativa==dicio_inicio['tentativas']:  # Caso o usuário não tenha conseguido achar a palavra
     print(f'{cores["errada"]} Que pena, você não descobriu... A resposta era {resposta}{cores["neutra"]}')
