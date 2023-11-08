@@ -74,6 +74,7 @@ def validaTentativa(chute):
     
     
 
+os.system('cls||clear')  # Limpar console
 
 nivel=int(input('Escolha sua dificuldade (1-7) '))
 
@@ -84,8 +85,6 @@ listaescolhida=filtra(PALAVRAS,letras)
 dicio_inicio=inicializa(listaescolhida)
 resposta=dicio_inicio['sorteada']
 
-print(resposta)
-
 correto = False
 
 tentativa=0
@@ -95,7 +94,7 @@ while tentativa<dicio_inicio['tentativas'] and not correto:
     
     chute=input(f'Tente uma palavra com {letras} letras: ')
 
-    os.system('cls||clear')
+    os.system('cls||clear')  # Limpar console
 
     (res,valid,acs) = validaTentativa(chute)
     if valid:
