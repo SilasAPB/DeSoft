@@ -2,6 +2,7 @@ import random
 import os
 from palavras import PALAVRAS
 
+
 # Funções em módulo
 from crTabela import crTabela
 
@@ -78,7 +79,15 @@ def validaTentativa(chute):
 
 os.system('cls||clear')  # Limpar console
 
+print('Bem vindo ao Termo Insper!!!')
+
+player=input('Digite seu nome')
+
 continuar=True
+
+jogo=1 
+pontos=0
+pontosfinais=0
 
 while continuar:
 
@@ -93,30 +102,30 @@ while continuar:
 
     correto = False
 
-tentativa=0
-historico = []
-while tentativa<dicio_inicio['tentativas'] and not correto:
+    tentativa=0
+    historico = []
+    while tentativa<dicio_inicio['tentativas'] and not correto:
 
-    print(crTabela(historico,letras,dicio_inicio['tentativas']))
-    
-    chute=input(f'Tente uma palavra com {letras} letras: ')
+        print(crTabela(historico,letras,dicio_inicio['tentativas']))
+        
+        chute=input(f'Tente uma palavra com {letras} letras: ')
 
         os.system('cls||clear')  # Limpar console
 
-    (res,valid,acs) = validaTentativa(chute)
-    if valid:
-        historico.append(res)
-        dicio_inicio['especuladas'].append(chute.lower())
-    else:
-        print(res)
-    
+        (res,valid,acs) = validaTentativa(chute)
+        if valid:
+            historico.append(res)
+            dicio_inicio['especuladas'].append(chute.lower())
+        else:
+            print(res)
+        
 
-    if acs==letras:  # Checa se todas as letras foram acertadas
-        correto = True
-    elif valid:
-        tentativa+=1
+        if acs==letras:  # Checa se todas as letras foram acertadas
+            correto = True
+        elif valid:
+            tentativa+=1
 
-
+    pontos+=(dicio_inicio['tentativas']-tentativa)*nivel
     # Sequência fora do loop de jogo
     print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
     if correto:  # Caso o usuário tenha descoberto a palavra
@@ -127,5 +136,8 @@ while tentativa<dicio_inicio['tentativas'] and not correto:
     pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
     if int(pergunta)==1:
         continuar=True
+        jogo+=1
     elif int(pergunta)==0:
         continuar=False
+        pontosfinais=pontos/jogo
+        print(f'Obrigado por jogar {player}, sua pontuação final foi {pontosfinais}')
