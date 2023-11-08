@@ -79,9 +79,9 @@ def validaTentativa(chute):
 
 os.system('cls||clear')  # Limpar console
 
-print('Bem vindo ao Termo Insper!!!')
+print('Bem vindo ao Termo Insper!!!\n\n\n\n')
 
-player=input('Digite seu nome')
+player=input('Digite seu nome: ') #pede o nome do jogador
 
 continuar=True
 
@@ -122,7 +122,7 @@ while continuar:
 
         if acs==letras:  # Checa se todas as letras foram acertadas
             correto = True
-        elif valid:
+        elif valid: #checa se a especulada é valida
             tentativa+=1
 
     pontos+=(dicio_inicio['tentativas']-tentativa)*nivel
@@ -134,10 +134,17 @@ while continuar:
         print(f'{cores["errada"]} Que pena, você não descobriu... A resposta era {resposta}{cores["neutra"]}')
 
     pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
+
+    validos=[0,1]
+
+    while int(pergunta) not in validos:
+        print(f'Digite um valor válido {player}!!')
+        pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
+        
     if int(pergunta)==1:
         continuar=True
         jogo+=1
-    elif int(pergunta)==0:
+    elif int(pergunta)==0: #finalização do jogo
         continuar=False
         pontosfinais=pontos/jogo
         print(f'Obrigado por jogar {player}, sua pontuação final foi {pontosfinais}')
