@@ -1,6 +1,9 @@
 import random
 from palavras import PALAVRAS
 
+# Funções em módulo
+from crTabela import crTabela
+
 cores = {
     'correta' : '\033[0;32;40m',
     'parcial' : '\033[0;33;40m',
@@ -73,16 +76,7 @@ def validaTentativa(chute):
             print('\033[1;30;43m PARABÉNS, VOCÊ DESCOBRIU A PALAVRA \033[m')
         elif a!=letras and tentativa==dicio_inicio['tentativas']:
             print(f'\033[1;31;40m que pena, você não descobriu... A resposta era {resposta} \033[m')
-
-def ptTabela(historico,tamanho):
-    tabela = '-'*((3*tamanho)-1)
-    if len(historico):
-        for palavra in historico:
-            coluna = '|'
-            for l in palavra:
-                coluna+= l+'|'
-            tabela+=coluna
-        
+    
     
 
 
@@ -97,7 +91,6 @@ resposta=dicio_inicio['sorteada']
 
 tentativa=0
 while tentativa<dicio_inicio['tentativas']:
-    chute=input(f'Tente uma palavra com {letras} letras  ')
+    chute=input(f'Tente uma palavra com {letras} letras: ')
     validaTentativa(chute)
-    dicio_inicio['especuladas']
-    ptTabela(chute,dicio_inicio['especuladas'],dicio_inicio['tentativas'])
+    print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
