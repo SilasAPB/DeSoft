@@ -79,15 +79,22 @@ def validaTentativa(chute):
 
 os.system('cls||clear')  # Limpar console
 
-print('Bem vindo ao Termo Insper!!!\n\n\n\n')
+print('''Bem vindo ao Termo Insper!!!
+Regras:
+\t- Escolha uma das dificuldades para jogar
+\t- Palavras repetidas não serão contabilizadas como tentativas
+\t- Use palavras que tenha o número de letras indicado
+\t- Sistema de pontos:''')
+
 
 player=input('Digite seu nome: ') #pede o nome do jogador
 
 continuar=True
 
+jogomax=0
 jogo=1 
 pontos=0
-pontosfinais=0
+recorde=0
 
 while continuar:
 
@@ -126,12 +133,20 @@ while continuar:
             tentativa+=1
 
     pontos+=(dicio_inicio['tentativas']-tentativa)*nivel
+
     # Sequência fora do loop de jogo
     print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
     if correto:  # Caso o usuário tenha descoberto a palavra
         print(f'{cores["correta"]} PARABÉNS, VOCÊ DESCOBRIU A PALAVRA {cores["neutra"]}')
     elif nivel!=letras and tentativa==dicio_inicio['tentativas']:  # Caso o usuário não tenha conseguido achar a palavra
         print(f'{cores["errada"]} Que pena, você não descobriu... A resposta era {resposta}{cores["neutra"]}')
+        if pontos>recorde:
+            recorde=pontos
+        if jogomax<jogo:
+            jogomax=jogo
+        print(f'{cores["errada"]}Sua pontuação de {pontos} foi zerada{cores["neutra"]}')
+        pontos=0
+        jogo=1
 
     pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
 
@@ -146,5 +161,6 @@ while continuar:
         jogo+=1
     elif int(pergunta)==0: #finalização do jogo
         continuar=False
-        pontosfinais=pontos/jogo
-        print(f'Obrigado por jogar {player}, sua pontuação final foi {pontosfinais}')
+        if pontos>recorde:
+            recorde=pontos
+        print(f'Obrigado por jogar {player}, sua maior pontuação foi {recorde}, invicto por {jogomax} jogos')
