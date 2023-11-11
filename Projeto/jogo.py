@@ -1,7 +1,9 @@
 import random
 import os
 import json
-from palavras import PALAVRAS
+from palavrasExtendido import PALAVRAS
+from DicioApi import retornaSignificado
+
 
 
 # Funções em módulo
@@ -86,6 +88,7 @@ Regras:
 \t- Palavras repetidas não serão contabilizadas como tentativas
 \t- Use palavras que tenha o número de letras indicado
 \t- Para desistir da partida, digite \"desistir\"
+\t- Para pedir uma dica, digite \"definicao\". Cada dica custará 1 tentativa.
 
 Código de cores:
 \t{clTxt('Amarelo','parcial')} : a palavra possui essa letra mas em outra posição
@@ -103,11 +106,12 @@ recorde=0
 
 proibidas = '\"\'!@#$%^&*()-+?_=,<>/\\ç^~áàãâéêí0123456789'
 
-placar = {}
 # Ler placar de arquivo externo
-if os.path.exists('./placar.json'):
+placar = {}
+if os.path.exists('./placar.json'):  # Checando se o arquivo existe
     with open('placar.json', 'r') as data:
-        placar = json.load(data)
+        placar = json.load(data)  # Lendo o arquivo
+
 
 # UI de Setup
 print(cabecalho)
@@ -132,6 +136,7 @@ while continuar:
 
     tentativa=0
     historico = []
+    dica = 0
 
     os.system('cls||clear')  # Limpar console
 
@@ -139,15 +144,39 @@ while continuar:
     # Loop principal de jogo
     while tentativa<dicio_inicio['tentativas'] and not correto:
         # Interface principal do jogo
-        # print(cabecalho)
+        if dica:
+            print('Dicas:')
+            for i in range(dica):
+                print(f'\t{definicao[i]}')
+                
         print(crTabela(historico,letras,dicio_inicio['tentativas']))
         chute=input(f'Tente uma palavra com {letras} letras: ').strip()
         
         if chute == 'desistir': # Caso o usuário desista
-            tentativa<dicio_inicio['tentativas']
+            tentativa = dicio_inicio['tentativas']
+            continue
+
+        if chute == 'definicao':
+            os.system('cls||clear')  # Limpar console
+            
+            if dica == 0:  # Só é solicidada a api de dicionário da primeira vez
+                definicao = retornaSignificado(resposta)
+            
+            if not definicao:
+                definicao = ["Eita! não achamos uma definição para essa palavra..."]
+
+            if dica < len(definicao):
+                dica+=1
+                tentativa+=1
+                historico.append('-'*letras)
+            else:
+                print(clTxt('Todas as dicas disponíveis foram utilizadas','errada'))
+            continue
+            
+
+
 
         os.system('cls||clear')  # Limpar console
-
         
         # Validação do input
         (res,valid,acs) = validaTentativa(chute)
