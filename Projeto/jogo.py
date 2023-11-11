@@ -114,7 +114,7 @@ Sistema de pontos:
 continuar=True
 
 jogomax=0
-jogo=1
+jogo=0
 pontos=0
 recorde=0
 
@@ -166,8 +166,8 @@ while continuar:
         chute=input(f'Tente uma palavra com {letras} letras: ').strip()
         
         if chute == 'desistir': # Caso o usuário desista
-            tentativa = dicio_inicio['tentativas']
-            continue
+            tentativa = dicio_inicio['tentativas'] #cria a condição para fim da rodada
+            continue #retorna no começo do while 
 
         if chute == 'definicao':
             os.system('cls||clear')  # Limpar console
@@ -214,18 +214,35 @@ while continuar:
     
     if correto:  # Caso o usuário tenha descoberto a palavra
         print(clTxt(f'PARABÉNS, VOCÊ DESCOBRIU A PALAVRA','correta'))
-    
-    elif nivel!=letras and tentativa==dicio_inicio['tentativas']:  # Caso o usuário não tenha conseguido achar a palavra
-        print(clTxt(f'Que pena, você não descobriu... A resposta era {resposta}','errada'))
-    
         if pontos>recorde:
             recorde=pontos
-        if jogomax<jogo:
-            jogomax=jogo
+            if jogomax<jogo:
+                jogomax=jogo
+
+    elif nivel!=letras and tentativa==dicio_inicio['tentativas'] and chute=='desistir':  # Caso o usuário tenha desistido da rodada
+        print(clTxt(f'Que pena, você não descobriu... A resposta era {resposta}','errada'))
+        jogo=0
+        if pontos>recorde:
+            recorde=pontos
+            if jogomax<jogo:
+                jogomax=jogo
     
-        print(clTxt(f'Sua pontuação de {pontos} foi zerada','errada'))
-        pontos=0
-        jogo=1
+        print(clTxt(f'Sua pontuação foi diminuida em {nivel} pontos','errada'))
+        pontos-=nivel
+
+    
+    elif nivel!=letras and tentativa==dicio_inicio['tentativas'] :  # Caso o usuário não tenha conseguido achar a palavra
+        print(clTxt(f'Que pena, você não descobriu... A resposta era {resposta}','errada'))
+        jogo=0
+        if pontos>recorde:
+            recorde=pontos
+            if jogomax<jogo:
+                jogomax=jogo
+        
+        if pontos>0:
+            pontos=0
+            print(clTxt(f'Sua pontuação de {pontos} foi zerada','errada'))#Zera a pontuação em caso de derrota e saldo positivo
+
 
 
     pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
@@ -241,6 +258,8 @@ while continuar:
         continuar=False
         if pontos>recorde:
             recorde=pontos
+        if correto:
+            jogo+=1
         
         placar[player] = [recorde,jogomax]
 
@@ -249,7 +268,7 @@ while continuar:
             data.write(jsonObject)
         
 
-        print(f'Obrigado por jogar {player}, sua maior pontuação foi {recorde}, invicto por {jogomax} jogos')
+        print(f'Obrigado por jogar {player}, sua maior pontuação foi {recorde}, e conseguiu ficar invicto por {jogomax} jogos!!')
         print('\nO placar final foi:')
         for nome,dados in placar.items():
             print(f'[{nome}] {dados[0]} pontos | {dados[1]} partidas concecutivas')
