@@ -3,7 +3,6 @@ import os
 import json
 from palavras import PALAVRAS
 
-
 # Funções em módulo
 from crTabela import crTabela
 
@@ -12,7 +11,8 @@ cores = {
     'parcial' : '\033[0;33;40m',
     'neutra' : '\033[0;37;40m',
     'padrao' : '\033[m',
-    'errada' : '\033[1;31;40m'
+    'errada' : '\033[1;31;40m',
+    'azul' : '\033[1;34;40m'
 }
 
 # FUNÇÕES
@@ -80,7 +80,9 @@ def validaTentativa(chute):
     
 
 # Variáveis globais do jogo
-cabecalho = f'''Bem vindo ao Termo-Insper!!!
+cabecalho = f'''
+Bem vindo ao Termo-Insper!!!
+
 Regras:
 \t- Escolha uma das dificuldades para jogar
 \t- Palavras repetidas não serão contabilizadas como tentativas
@@ -92,7 +94,19 @@ Código de cores:
 \t{clTxt('Verde','correta')} : a letra está na posição correta
 \t{clTxt('Cinza','neutra')} : a palavra não possui a letra
 
-Sistema de pontos:\n'''
+Sistema de pontos:
+\t - O número de tentativas é dado pelo dificuldade escolhida
+\t - Os pontos são dados pelo número de tentativas maximas menos o número de chutes errados:
+\t\t Por exemplo: Dificuldade 1 (4 tentativas):
+\t\t\t Correta: rua
+\t\t\t Tentativas: sol - lua - rua
+\t\t\t Foram 2 tentativas erradas até acertar, logo:
+\t\t\t\t Pontos: 4-2 = 2
+\t\t - Os pontos são somados a cada partida até que o jogador perca ou desista
+\t\t - No caso de derrota, se o jogador quiser jogar de novo sua pontuação será zerada
+\t\t - Pontuações mais altas serão salvas como recordes!!
+
+{clTxt('BOA SORTE!!!!','azul')}'''
 
 continuar=True
 
@@ -116,7 +130,6 @@ player=input('\nDigite seu nome: ') # Pede o nome do jogador
 
 while continuar:
     os.system('cls||clear')  # Limpar console
-    print(cabecalho)
     nivel=int(input('\nEscolha sua dificuldade (1-7) '))
 
 
