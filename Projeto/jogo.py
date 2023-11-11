@@ -96,12 +96,12 @@ Código de cores:
 
 Sistema de pontos:
 \t - O número de tentativas é dado pelo dificuldade escolhida
-\t - Os pontos são dados pelo número de tentativas maximas menos o número de chutes errados:
+\t - Os pontos são dados pelo número de tentativas maximas menos o número de chutes errados multiplicado pelo nível:
 \t\t Por exemplo: Dificuldade 1 (4 tentativas):
 \t\t\t Correta: rua
 \t\t\t Tentativas: sol - lua - rua
 \t\t\t Foram 2 tentativas erradas até acertar, logo:
-\t\t\t\t Pontos: 4-2 = 2
+\t\t\t\t Pontos: (4-2) X 1 = 2
 \t\t - Os pontos são somados a cada partida até que o jogador perca ou desista
 \t\t - No caso de derrota, se o jogador quiser jogar de novo sua pontuação será zerada
 \t\t - Pontuações mais altas serão salvas como recordes!!
@@ -213,7 +213,7 @@ while continuar:
         if pontos>recorde:
             recorde=pontos
         
-        placar[player] = [jogomax,recorde]
+        placar[player] = [recorde,jogomax]
 
         jsonObject = json.dumps(placar,indent=4)
         with open('placar.json', 'w') as data:
