@@ -79,26 +79,33 @@ def validaTentativa(chute):
 
 os.system('cls||clear')  # Limpar console
 
-print('''Bem vindo ao Termo Insper!!!
+cabecalho = f'''Bem vindo ao Termo-Insper!!!
 Regras:
 \t- Escolha uma das dificuldades para jogar
 \t- Palavras repetidas não serão contabilizadas como tentativas
 \t- Use palavras que tenha o número de letras indicado
-\t- Sistema de pontos:''')
+
+Código de cores:
+\t{clTxt('Amarelo','parcial')} : a palavra possui essa letra mas em outra posição
+\t{clTxt('Verde','correta')} : a letra está na posição correta
+\t{clTxt('Cinza','neutra')} : a palavra não possui a letra
+
+Sistema de pontos:\n'''
+print(cabecalho)
 
 
-player=input('Digite seu nome: ') #pede o nome do jogador
+player=input('\nDigite seu nome: ') # Pede o nome do jogador
 
 continuar=True
 
 jogomax=0
-jogo=1 
+jogo=1
 pontos=0
 recorde=0
 
 while continuar:
 
-    nivel=int(input('Escolha sua dificuldade (1-7) '))
+    nivel=int(input('\nEscolha sua dificuldade (1-7) '))
 
     letras=nivel+2  # Quantidade de letras corresponde ao nivel de dificuldade + 2
 
@@ -111,7 +118,11 @@ while continuar:
 
     tentativa=0
     historico = []
+
+    os.system('cls||clear')  # Limpar console
+    
     while tentativa<dicio_inicio['tentativas'] and not correto:
+        print(cabecalho)
 
         print(crTabela(historico,letras,dicio_inicio['tentativas']))
         
@@ -136,23 +147,25 @@ while continuar:
 
     # Sequência fora do loop de jogo
     print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
+    
     if correto:  # Caso o usuário tenha descoberto a palavra
-        print(f'{cores["correta"]} PARABÉNS, VOCÊ DESCOBRIU A PALAVRA {cores["neutra"]}')
+        print(clTxt(f'PARABÉNS, VOCÊ DESCOBRIU A PALAVRA','correta'))
+    
     elif nivel!=letras and tentativa==dicio_inicio['tentativas']:  # Caso o usuário não tenha conseguido achar a palavra
-        print(f'{cores["errada"]} Que pena, você não descobriu... A resposta era {resposta}{cores["neutra"]}')
+        print(clTxt(f'Que pena, você não descobriu... A resposta era {resposta}','errada'))
+    
         if pontos>recorde:
             recorde=pontos
         if jogomax<jogo:
             jogomax=jogo
-        print(f'{cores["errada"]}Sua pontuação de {pontos} foi zerada{cores["neutra"]}')
+    
+        print(clTxt(f'Sua pontuação de {pontos} foi zerada','errada'))
         pontos=0
         jogo=1
 
     pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
 
-    validos=[0,1]
-
-    while int(pergunta) not in validos:
+    while pergunta not in ['0','1']:
         print(f'Digite um valor válido {player}!!')
         pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
         
