@@ -75,10 +75,8 @@ def validaTentativa(chute):
 
             return (parcial,True,comparar.count(0))
     
-    
 
-os.system('cls||clear')  # Limpar console
-
+# Variáveis globais do jogo    
 cabecalho = f'''Bem vindo ao Termo-Insper!!!
 Regras:
 \t- Escolha uma das dificuldades para jogar
@@ -91,10 +89,6 @@ Código de cores:
 \t{clTxt('Cinza','neutra')} : a palavra não possui a letra
 
 Sistema de pontos:\n'''
-print(cabecalho)
-
-
-player=input('\nDigite seu nome: ') # Pede o nome do jogador
 
 continuar=True
 
@@ -103,10 +97,19 @@ jogo=1
 pontos=0
 recorde=0
 
-while continuar:
 
+# UI de Setup
+print(cabecalho)
+player=input('\nDigite seu nome: ') # Pede o nome do jogador
+
+
+while continuar:
+    os.system('cls||clear')  # Limpar console
+    print(cabecalho)
     nivel=int(input('\nEscolha sua dificuldade (1-7) '))
 
+
+    # Iniciar configurações da partida do jogo
     letras=nivel+2  # Quantidade de letras corresponde ao nivel de dificuldade + 2
 
     listaescolhida=filtra(PALAVRAS,letras)
@@ -119,33 +122,35 @@ while continuar:
     tentativa=0
     historico = []
 
-    os.system('cls||clear')  # Limpar console
-    
-    while tentativa<dicio_inicio['tentativas'] and not correto:
-        print(cabecalho)
 
+    while tentativa<dicio_inicio['tentativas'] and not correto:
+        # Interface principal do jogo
+        print(cabecalho)
         print(crTabela(historico,letras,dicio_inicio['tentativas']))
-        
         chute=input(f'Tente uma palavra com {letras} letras: ')
 
         os.system('cls||clear')  # Limpar console
 
+        
+        # Validação do input
         (res,valid,acs) = validaTentativa(chute)
+        
         if valid:
             historico.append(res)
             dicio_inicio['especuladas'].append(chute.lower())
         else:
             print(res)
         
-
         if acs==letras:  # Checa se todas as letras foram acertadas
             correto = True
-        elif valid: #checa se a especulada é valida
+        elif valid: # Checa se a especulada é valida
             tentativa+=1
 
-    pontos+=(dicio_inicio['tentativas']-tentativa)*nivel
 
-    # Sequência fora do loop de jogo
+    pontos+=(dicio_inicio['tentativas']-tentativa)*nivel  # Contabilização dos pontos
+
+
+    # Sequência de finalização da partida
     print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
     
     if correto:  # Caso o usuário tenha descoberto a palavra
@@ -163,16 +168,17 @@ while continuar:
         pontos=0
         jogo=1
 
+
     pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
 
     while pergunta not in ['0','1']:
         print(f'Digite um valor válido {player}!!')
         pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
         
-    if int(pergunta)==1:
+    if int(pergunta)==1:  # Iniciar uma nova partida
         continuar=True
         jogo+=1
-    elif int(pergunta)==0: #finalização do jogo
+    elif int(pergunta)==0: # Finalização do jogo
         continuar=False
         if pontos>recorde:
             recorde=pontos
