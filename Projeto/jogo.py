@@ -1,5 +1,6 @@
 import random
 import os
+import json
 from palavras import PALAVRAS
 
 
@@ -48,19 +49,21 @@ def inidica_posicao(sort, espe):  # ("Palavra sorteada pelo sistema", "Palavra e
                 lis.append(2)  # Letra não existe na palavra sorteada
     return lis
 
-
 def clTxt(texto,cor):  # Adicionar caracteres coloridos
     return cores[cor]+texto+cores['padrao']
 
 def validaTentativa(chute):
+    for l in chute:
+        if l in proibidas:
+            return (clTxt('Essa palavra contém caracteres especiais proibidos ou números','errada'),False,0)
     if chute not in listaescolhida:  # Verifica se a entrada é uma palavra dentro da lista de palavras
-        return ('Palavra não conhecida, tente outra',False,0)
+        return (clTxt('Palavra não conhecida, tente outra','errada'),False,0)
     elif chute in dicio_inicio['especuladas']:
-        return ('Essa palavra já foi digitada. Digite novamente!',False,0)
+        return (clTxt('Essa palavra já foi digitada. Digite novamente!','errada'),False,0)
     else:
         comparar=inidica_posicao(dicio_inicio['sorteada'],chute)
         if comparar == []:
-            return(f'essa palavra não possui {letras} letras, tente novamente com uma palavra válida ',False,0)
+            return(clTxt(f'essa palavra não possui {letras} letras, tente novamente com uma palavra válida','errada'),False,0)
         else:
             global tentativa
             
@@ -76,12 +79,13 @@ def validaTentativa(chute):
             return (parcial,True,comparar.count(0))
     
 
-# Variáveis globais do jogo    
+# Variáveis globais do jogo
 cabecalho = f'''Bem vindo ao Termo-Insper!!!
 Regras:
 \t- Escolha uma das dificuldades para jogar
 \t- Palavras repetidas não serão contabilizadas como tentativas
 \t- Use palavras que tenha o número de letras indicado
+\t- Para desistir da partida, digite \"desistir\"
 
 Código de cores:
 \t{clTxt('Amarelo','parcial')} : a palavra possui essa letra mas em outra posição
@@ -97,6 +101,13 @@ jogo=1
 pontos=0
 recorde=0
 
+proibidas = '\"\'!@#$%^&*()-+?_=,<>/\\ç^~áàãâéêí0123456789'
+
+placar = {}
+# Ler placar de arquivo externo
+if os.path.exists('./placar.json'):
+    with open('placar.json', 'r') as data:
+        placar = json.load(data)
 
 # UI de Setup
 print(cabecalho)
@@ -122,12 +133,18 @@ while continuar:
     tentativa=0
     historico = []
 
+    os.system('cls||clear')  # Limpar console
 
+
+    # Loop principal de jogo
     while tentativa<dicio_inicio['tentativas'] and not correto:
         # Interface principal do jogo
-        print(cabecalho)
+        # print(cabecalho)
         print(crTabela(historico,letras,dicio_inicio['tentativas']))
-        chute=input(f'Tente uma palavra com {letras} letras: ')
+        chute=input(f'Tente uma palavra com {letras} letras: ').strip()
+        
+        if chute == 'desistir': # Caso o usuário desista
+            tentativa<dicio_inicio['tentativas']
 
         os.system('cls||clear')  # Limpar console
 
@@ -182,4 +199,16 @@ while continuar:
         continuar=False
         if pontos>recorde:
             recorde=pontos
+        
+        placar[player] = [jogomax,recorde]
+
+        jsonObject = json.dumps(placar,indent=4)
+        with open('placar.json', 'w') as data:
+            data.write(jsonObject)
+        
+
         print(f'Obrigado por jogar {player}, sua maior pontuação foi {recorde}, invicto por {jogomax} jogos')
+        print('\nO placar final foi:')
+        for nome,dados in placar.items():
+            print(f'[{nome}] {dados[0]} pontos | {dados[1]} partidas concecutivas')
+        
