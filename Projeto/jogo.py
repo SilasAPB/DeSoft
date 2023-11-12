@@ -135,13 +135,19 @@ player=input('\nDigite seu nome: ') # Pede o nome do jogador
 
 while continuar:
     os.system('cls||clear')  # Limpar console
+    
     nivel=int(input('\nEscolha sua dificuldade (1-7) '))
-
+    while nivel < 1 or nivel > 7:
+        print(clTxt("\nValor Invalido!",'errada'))
+        nivel=int(input('\nEscolha sua dificuldade (1-7) '))
 
     # Iniciar configurações da partida do jogo
     letras=nivel+2  # Quantidade de letras corresponde ao nivel de dificuldade + 2
 
     listaescolhida=filtra(PALAVRAS,letras)
+    for i in range(len(listaescolhida)):
+        listaescolhida[i] = normalizaPalavra(listaescolhida[i])
+
 
     dicio_inicio=inicializa(listaescolhida)
     original = dicio_inicio['sorteada']
@@ -162,7 +168,8 @@ while continuar:
             print('Dicas:')
             for i in range(abs(dica)):
                 print(f'\t{definicao[i]}')
-                
+        
+        print(resposta)
         print(crTabela(historico,letras,dicio_inicio['tentativas']))
         chute = normalizaPalavra(input(f'Tente uma palavra com {letras} letras: ').strip())
         
