@@ -2,11 +2,12 @@ import random
 import os
 import json
 from palavrasExtendido import PALAVRAS
-from DicioApi import retornaSignificado
 
 
 # Funções em módulo
+from DicioApi import retornaSignificado
 from crTabela import crTabela
+from normalizaPalavra import normalizaPalavra
 
 cores = {
     'correta' : '\033[0;32;40m',
@@ -118,12 +119,12 @@ jogo=0
 pontos=0
 recorde=0
 
-proibidas = '\"\'!@#$%^&*()-+?_=,<>/\\ç^~áàãâéêí0123456789'
+proibidas = '\"\'!@#$%^&*()-+?_=,<>/\\^~0123456789'
 
 # Ler placar de arquivo externo
 placar = {}
 if os.path.exists('./placar.json'):  # Checando se o arquivo existe
-    with open('placar.json', 'r') as data:
+    with open('./placar.json', 'r') as data:
         placar = json.load(data)  # Lendo o arquivo
 
 
@@ -143,8 +144,8 @@ while continuar:
     listaescolhida=filtra(PALAVRAS,letras)
 
     dicio_inicio=inicializa(listaescolhida)
-    resposta=dicio_inicio['sorteada']
-
+    original = dicio_inicio['sorteada']
+    resposta=normalizaPalavra(original)
     correto = False
 
     tentativa=0
@@ -159,11 +160,11 @@ while continuar:
         # Interface principal do jogo
         if dica:
             print('Dicas:')
-            for i in range(dica):
+            for i in range(abs(dica)):
                 print(f'\t{definicao[i]}')
                 
         print(crTabela(historico,letras,dicio_inicio['tentativas']))
-        chute=input(f'Tente uma palavra com {letras} letras: ').strip()
+        chute = normalizaPalavra(input(f'Tente uma palavra com {letras} letras: ').strip())
         
         if chute == 'desistir': # Caso o usuário desista
             tentativa = dicio_inicio['tentativas'] #cria a condição para fim da rodada
@@ -173,16 +174,19 @@ while continuar:
             os.system('cls||clear')  # Limpar console
             
             if dica == 0:  # Só é solicidada a api de dicionário da primeira vez
-                definicao = retornaSignificado(resposta)
-            
-            if not definicao:
-                definicao = ["Eita! não achamos uma definição para essa palavra..."]
+                print(clTxt('\nPesquisando...','parcial'))
+                definicao = retornaSignificado(original)
+                os.system('cls||clear')  # Limpar console
+                if not definicao:
+                    definicao = ["Eita! não achamos uma definição para essa palavra..."]
+                    dica = -1
 
-            if dica < len(definicao):
+        
+            if dica < len(definicao) and dica > 0:
                 dica+=1
                 tentativa+=1
                 historico.append('-'*letras)
-            else:
+            elif dica > 0:
                 print(clTxt('Todas as dicas disponíveis foram utilizadas','errada'))
             continue
             
