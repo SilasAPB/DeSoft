@@ -23,10 +23,10 @@ def validaTentativa(chute):
     elif chute in dicio_inicio['especuladas']:
         return (clTxt('Essa palavra já foi digitada. Digite novamente!','errada'),False,0)
     else:
-        comparar=inidica_posicao(dicio_inicio['sorteada'],chute)
+        comparar=inidica_posicao(resposta,chute)
         if comparar == []:
             return(clTxt(f'Essa palavra não possui {letras} letras, tente novamente com uma palavra válida','errada'),False,0)
-        else:            
+        else:
             parcial=[]
             for pos in range(len(comparar)):
                 if comparar[pos]==0:
