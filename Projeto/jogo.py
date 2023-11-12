@@ -8,15 +8,8 @@ from palavrasExtendido import PALAVRAS
 from DicioApi import retornaSignificado
 from crTabela import crTabela
 from normalizaPalavra import normalizaPalavra
-
-cores = {
-    'correta' : '\033[0;32;40m',
-    'parcial' : '\033[0;33;40m',
-    'neutra' : '\033[0;37;40m',
-    'padrao' : '\033[m',
-    'errada' : '\033[1;31;40m',
-    'azul' : '\033[1;34;40m'
-}
+from clTxt import clTxt
+from logo import logo
 
 # FUNÇÕES
 def filtra(lista,num): # Filtra as palavras com a quantidade de letras desejadas
@@ -52,9 +45,6 @@ def inidica_posicao(sort, espe):  # ("Palavra sorteada pelo sistema", "Palavra e
                 lis.append(2)  # Letra não existe na palavra sorteada
     return lis
 
-def clTxt(texto,cor):  # Adicionar caracteres coloridos
-    return cores[cor]+texto+cores['padrao']
-
 def validaTentativa(chute):
     for l in chute:
         if l in proibidas:
@@ -84,6 +74,7 @@ def validaTentativa(chute):
 
 # Variáveis globais do jogo
 cabecalho = f'''
+{logo()}
 Bem vindo ao Termo-Insper!!!
 
 Regras:
