@@ -21,3 +21,13 @@ O jogo conta com um sistema de pontos que salva o placar de recordes para compar
 * Apenas **palavras existentes** podem ser jogadas
 
 ![](https://github.com/SilasAPB/DeSoft/blob/main/Img/TelaInicial.png)
+
+
+## Modo de uso:
+Para jogar, inicie o arquivo `jogo.py`
+
+### Dependências:
+* random
+* requests
+* os
+* json
