@@ -1,4 +1,3 @@
-import random
 import os
 import json
 from palavrasExtendido import PALAVRAS
@@ -10,56 +9,24 @@ from crTabela import crTabela
 from normalizaPalavra import normalizaPalavra
 from clTxt import clTxt
 from logo import logo
+from inidicaposicao import inidica_posicao
+from filtra import filtra
+from inicializa import inicializa
 
 # FUNÇÕES
-def filtra(lista,num): # Filtra as palavras com a quantidade de letras desejadas
-    lisn=[]
-    for palavra in lista:
-        if len(palavra)==num:
-            lisn.append(palavra.lower())
-    return lisn
-
-
-def inicializa(lis):  # Define as configuraões do jogo
-    a=random.choice(lis)
-    dicio={
-        'n': len(a),
-        'sorteada' : a,
-        'especuladas' : [],
-        'tentativas': len(a) + 1  # Usuário pode tentar uma vez para cada letra com um bonus de 1 tentativa
-    }
-    return dicio
-
-def inidica_posicao(sort, espe):  # ("Palavra sorteada pelo sistema", "Palavra especulada pelo usuário")
-
-    lis=[]
-    if len(sort)!=len(espe):
-        return []
-    else:
-        for i in range(len(sort)):
-            if espe[i]==sort[i]:
-                lis.append(0)  # Letra está na posição correta
-            elif espe[i] in sort:
-                lis.append(1)  # Letra existe na palavra sorteada
-            else:
-                lis.append(2)  # Letra não existe na palavra sorteada
-    return lis
-
 def validaTentativa(chute):
     for l in chute:
         if l in proibidas:
             return (clTxt('Essa palavra contém caracteres especiais proibidos ou números','errada'),False,0)
-    if chute not in listaescolhida:  # Verifica se a entrada é uma palavra dentro da lista de palavras
+    if chute not in listaescolhida and len(chute) == letras:  # Verifica se a entrada é uma palavra dentro da lista de palavras
         return (clTxt('Palavra não conhecida, tente outra','errada'),False,0)
     elif chute in dicio_inicio['especuladas']:
         return (clTxt('Essa palavra já foi digitada. Digite novamente!','errada'),False,0)
     else:
         comparar=inidica_posicao(dicio_inicio['sorteada'],chute)
         if comparar == []:
-            return(clTxt(f'essa palavra não possui {letras} letras, tente novamente com uma palavra válida','errada'),False,0)
-        else:
-            global tentativa
-            
+            return(clTxt(f'Essa palavra não possui {letras} letras, tente novamente com uma palavra válida','errada'),False,0)
+        else:            
             parcial=[]
             for pos in range(len(comparar)):
                 if comparar[pos]==0:
@@ -122,6 +89,9 @@ if os.path.exists('./placar.json'):  # Checando se o arquivo existe
 # UI de Setup
 print(cabecalho)
 player=input('\nDigite seu nome: ') # Pede o nome do jogador
+while player == '':
+        print(clTxt("\nNome Invalido!",'errada'))
+        player=input('\nDigite seu nome: ')
 
 
 while continuar:
@@ -160,7 +130,7 @@ while continuar:
             for i in range(abs(dica)):
                 print(f'\t{definicao[i]}')
         
-        print(resposta)
+        
         print(crTabela(historico,letras,dicio_inicio['tentativas']))
         chute = normalizaPalavra(input(f'Tente uma palavra com {letras} letras: ').strip())
         
@@ -187,8 +157,6 @@ while continuar:
             elif dica > 0:
                 print(clTxt('Todas as dicas disponíveis foram utilizadas','errada'))
             continue
-            
-
 
 
         os.system('cls||clear')  # Limpar console
