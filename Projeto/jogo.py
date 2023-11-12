@@ -73,7 +73,7 @@ Sistema de pontos:
 continuar=True
 
 jogomax=0
-jogo=0
+jogo=1
 pontos=0
 recorde=0
 
@@ -191,16 +191,13 @@ while continuar:
         print(clTxt(f'PARABÉNS, VOCÊ DESCOBRIU A PALAVRA','correta'))
         if pontos>recorde:
             recorde=pontos
-            if jogomax<jogo:
-                jogomax=jogo
 
     elif nivel!=letras and tentativa==dicio_inicio['tentativas'] and chute=='desistir':  # Caso o usuário tenha desistido da rodada
         print(clTxt(f'Que pena, você não descobriu... A resposta era {resposta}','errada'))
         jogo=0
         if pontos>recorde:
             recorde=pontos
-            if jogomax<jogo:
-                jogomax=jogo
+
 
         print(clTxt(f'Sua pontuação foi diminuida em {nivel} pontos','errada'))
         pontos-=nivel
@@ -211,13 +208,11 @@ while continuar:
         jogo=0
         if pontos>recorde:
             recorde=pontos
-            if jogomax<jogo:
-                jogomax=jogo
+
         
         if pontos>0:
-            pontos=0
             print(clTxt(f'Sua pontuação de {pontos} foi zerada','errada'))#Zera a pontuação em caso de derrota e saldo positivo
-
+            pontos=0
 
 
     pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
@@ -228,13 +223,16 @@ while continuar:
         
     if int(pergunta)==1:  # Iniciar uma nova partida
         continuar=True
+        if correto:
+            jogomax=jogo
         jogo+=1
+
     elif int(pergunta)==0: # Finalização do jogo
         continuar=False
         if pontos>recorde:
             recorde=pontos
         if correto:
-            jogo+=1
+            jogomax=jogo
         
         placar[player] = [recorde,jogomax]
 
