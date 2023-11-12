@@ -4,7 +4,7 @@ from palavrasExtendido import PALAVRAS
 
 
 # Funções em módulo
-from DicioApi import retornaSignificado
+from dicioApi import retornaSignificado
 from crTabela import crTabela
 from normalizaPalavra import normalizaPalavra
 from clTxt import clTxt
@@ -85,8 +85,8 @@ if os.path.exists('./placar.json'):  # Checando se o arquivo existe
     with open('./placar.json', 'r') as data:
         placar = json.load(data)  # Lendo o arquivo
 
-
 # UI de Setup
+os.system('cls||clear')  # Limpar console
 print(cabecalho)
 player=input('\nDigite seu nome: ') # Pede o nome do jogador
 while player == '':
@@ -105,14 +105,20 @@ while continuar:
     # Iniciar configurações da partida do jogo
     letras=nivel+2  # Quantidade de letras corresponde ao nivel de dificuldade + 2
 
+    # Cria lista de palavras
     listaescolhida=filtra(PALAVRAS,letras)
+
+    # Inicializa configurações da partida
+    dicio_inicio=inicializa(listaescolhida)
+
+    # Salva palavra sorteada sem normalização
+    original = dicio_inicio['sorteada']
+    
+    # Normalização da lista e da palavra sorteada
     for i in range(len(listaescolhida)):
         listaescolhida[i] = normalizaPalavra(listaescolhida[i])
-
-
-    dicio_inicio=inicializa(listaescolhida)
-    original = dicio_inicio['sorteada']
     resposta=normalizaPalavra(original)
+
     correto = False
 
     tentativa=0
@@ -136,6 +142,7 @@ while continuar:
         
         if chute == 'desistir': # Caso o usuário desista
             tentativa = dicio_inicio['tentativas'] #cria a condição para fim da rodada
+            os.system('cls||clear')  # Limpar console
             continue #retorna no começo do while 
 
         if chute == 'definicao':
@@ -145,16 +152,16 @@ while continuar:
                 print(clTxt('\nPesquisando...','parcial'))
                 definicao = retornaSignificado(original)
                 os.system('cls||clear')  # Limpar console
-                if not definicao:
+
+                if not definicao:  # Caso a api não tenha achado uma definição, o valor retornado pela função é falso
                     definicao = ["Eita! não achamos uma definição para essa palavra..."]
                     dica = -1
 
-        
-            if dica < len(definicao) and dica > 0:
+            if dica < len(definicao) and dica >= 0:  # Caso ainda tenham dicas disponíveis
                 dica+=1
                 tentativa+=1
                 historico.append('-'*letras)
-            elif dica > 0:
+            elif dica > 0 and dica == len(definicao): 
                 print(clTxt('Todas as dicas disponíveis foram utilizadas','errada'))
             continue
 
@@ -175,12 +182,10 @@ while continuar:
         elif valid: # Checa se a especulada é valida
             tentativa+=1
 
-
     pontos+=(dicio_inicio['tentativas']-tentativa)*nivel  # Contabilização dos pontos
 
-
     # Sequência de finalização da partida
-    print(crTabela(dicio_inicio['especuladas'],letras,dicio_inicio['tentativas']))
+    print(crTabela(historico,letras,dicio_inicio['tentativas']))
     
     if correto:  # Caso o usuário tenha descoberto a palavra
         print(clTxt(f'PARABÉNS, VOCÊ DESCOBRIU A PALAVRA','correta'))
@@ -196,7 +201,7 @@ while continuar:
             recorde=pontos
             if jogomax<jogo:
                 jogomax=jogo
-    
+
         print(clTxt(f'Sua pontuação foi diminuida em {nivel} pontos','errada'))
         pontos-=nivel
 
@@ -218,7 +223,7 @@ while continuar:
     pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
 
     while pergunta not in ['0','1']:
-        print(f'Digite um valor válido {player}!!')
+        print(clTxt(f'\nDigite um valor válido {player}!!\n','errada'))
         pergunta=input('Digite 0 para Sair ou Digite 1 para Jogar Novamente  ')
         
     if int(pergunta)==1:  # Iniciar uma nova partida
@@ -238,8 +243,8 @@ while continuar:
             data.write(jsonObject)
         
 
-        print(f'Obrigado por jogar {player}, sua maior pontuação foi {recorde}, e conseguiu ficar invicto por {jogomax} jogos!!')
+        print(f'\nObrigado por jogar, {player}. Sua maior pontuação foi {recorde}, e conseguiu ficar invicto por {jogomax} jogos!!')
         print('\nO placar final foi:')
         for nome,dados in placar.items():
-            print(f'[{nome}] {dados[0]} pontos | {dados[1]} partidas concecutivas')
+            print(f'\t[{nome}] {dados[0]} pontos | {dados[1]} partidas concecutivas')
         
