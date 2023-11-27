@@ -26,6 +26,13 @@ O jogo conta com um sistema de pontos que salva o placar de recordes para compar
 ## Modo de uso:
 Para jogar, inicie o arquivo `jogo.py`
 
+## Colaboradores
+#### Yamandú Germano Cavalcanti
+* [LinkedIn](https://www.linkedin.com/in/silas-pereira-09198620b/)
+* [GitHub](https://github.com/SilasAPB)
+#### Silas André Pereira de Brito
+* [LinkedIn](https://www.linkedin.com/in/silas-pereira-09198620b/)
+* [GitHub](https://github.com/YamanduGermano) 
 ### Dependências:
 * random
 * requests
