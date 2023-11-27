@@ -33,7 +33,7 @@ Para jogar, inicie o arquivo `jogo.py`
 #### Silas André Pereira de Brito
 * [LinkedIn](https://www.linkedin.com/in/silas-pereira-09198620b/)
 * [GitHub](https://github.com/YamanduGermano) 
-### Dependências:
+## Dependências:
 * random
 * requests
 * os
